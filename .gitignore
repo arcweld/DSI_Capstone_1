@@ -1,0 +1,9 @@
+*.pyc
+.idea
+*.bak
+*.swp
+
+# Jupyter Notebook
+.ipynb_checkpoints
+# raw data files
+*.dat
