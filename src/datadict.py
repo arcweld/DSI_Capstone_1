@@ -2,8 +2,8 @@ import re
 
 
 def dd_to_structure(dd_path):
-    '''
-    Harvests from a US Census Bureau data dictionary the headings, lengths, and locations of fixed-width elements.
+    '''Decompose a US Census Bureau data dictionary 
+    for needed info on fixed-width elements.
     
     parameter:
     -----
@@ -18,8 +18,13 @@ def dd_to_structure(dd_path):
         first and last index for each column in data dictionary
     sizes: list of integers
         width of each column in data dictionary
+    structures: string
+        
     '''
     structure = r'' # tmp_df.value.substr([position],[length]).alias('colname')
+    headers = []
+    locations = []
+    sizes = []
     last_loc = -1
     with open(dd_path, 'r') as d:
             data_dict = d.readlines()
@@ -37,5 +42,10 @@ def dd_to_structure(dd_path):
                     if header[0] == 'PADDING':
                         header[0] = f'PADDING{int(loc[0][0])}'
                     structure += f"tmp_df.value.substr({int(loc[0][0]):>2}, {int(size[0]):>2}).alias('{header[0]}'), "
+                    headers.append(header[0])
+                    locations.append((int(loc[0][0]),int(loc[0][1])))
+                    sizes.append(int(size[0]))
                     last_loc = int(loc[0][0])
 
+
+    return headers, locations, sizes, structure
