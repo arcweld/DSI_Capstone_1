@@ -1,3 +1,6 @@
+from pyspark.context import SparkContext
+from pyspark.sql.session import SparkSession
+
 def quick_look(df, col_name):
     '''
     Provides a quick look at a column of date in data frame
@@ -13,7 +16,9 @@ def quick_look(df, col_name):
     plot:
     '''
 
-
+    SparkContext.getOrCreate()
+    spark = SparkSession(sc)
+    
     query = f'''SELECT 
                     {col_name} ,
                     COUNT({col_name}) as count
