@@ -1,7 +1,4 @@
-from pyspark.context import SparkContext
-from pyspark.sql.session import SparkSession
-
-def quick_look(df, col_name):
+def ql(df, col_name):
     '''
     Provides a quick look at a column of date in data frame
     
@@ -13,13 +10,8 @@ def quick_look(df, col_name):
     ---
     sql query:
     
-    plot:
     '''
-
-    SparkContext.getOrCreate()
-    spark = SparkSession(sc)
-    
-    query = f'''SELECT 
+    return f'''SELECT 
                     {col_name} ,
                     COUNT({col_name}) as count
                 FROM {df} 
@@ -28,8 +20,7 @@ def quick_look(df, col_name):
                 ORDER BY 
                     {col_name}
                 '''
-    spark.sql(query).show()
-    df_check = spark.sql(query)
-    pdf_check = df_check.toPandas()
 
-    pdf_check.plot(kind='bar', x=col_name,y='count', fontsize=20);
+
+def quick_plot(df, col_name):
+    return df.plot(kind='bar', x=col_name, y='count', fontsize=20);

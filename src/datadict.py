@@ -49,3 +49,22 @@ def dd_to_structure(dd_path):
 
 
     return headers, locations, sizes, structure
+
+
+def ageGrouping(age_):
+    age = int(age_)
+    if age >= 0 and age <= 20:
+        return ' U21'
+    if age > 20  and age <= 30:
+        return '21-30'
+    if age > 30  and age <= 40:
+        return '31-40'
+    if age > 40  and age <= 50:
+        return '41-50'
+    if age > 50  and age <= 60:
+        return '51-60'
+    if age > 60  and age <= 70:
+        return '61-70'
+    if age > 70:
+        return 'over_70'
+    return '  None'
