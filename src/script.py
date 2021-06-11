@@ -40,7 +40,7 @@ def pop_proportions_test(m: int, X: int, n: int, Y: int, alfa: float=0.025) -> l
 def plot_test_results(func, p_value, title, savetofile, null_h=r'$H_0: p_1 = p_2$', alfa=0.025):
     '''plots results of p_value against test distribution
     '''
-    fig, ax = plt.subplots(1, figsize=(16, 3))
+    fig, ax = plt.subplots(1, figsize=(16, 5))
 
     x = np.linspace(min(p_value,2*func.ppf(alfa)), max(p_value,2*func.ppf(1- alfa)), num=250)
     ax.plot(x, func.pdf(x), linewidth=3, c='purple')
@@ -56,7 +56,7 @@ def plot_test_results(func, p_value, title, savetofile, null_h=r'$H_0: p_1 = p_2
     if func.ppf(alfa) < p_value and p_value < func.ppf(1- alfa):
         fig.text(.4,.2,'FAIL TO REJECT NULL HYPOTHESIS', fontsize='x-large', color='g')
     else:
-        fig.text(.42,.2,'REJECT NULL HYPOTHESIS', fontsize='x-large', rotation=30, color='r')
+        fig.text(.42,.2,'REJECT NULL HYPOTHESIS', fontsize='x-large', rotation=0, color='r')
     fig.savefig(f'output/{savetofile}_rej.png')
 
     ax.set_title(title);
