@@ -49,7 +49,7 @@ def plot_test_results(m, X, n, Y, title, savetofile, null_h=r'$H_0: p_1 = p_2$',
                     color="red", alpha=0.5)
     ax.fill_between(x, func.pdf(x), where=(x >= func.ppf(1- alfa)),
                     color="red", alpha=0.5)
-    fig.text(.4,.4, null_h, fontsize=40, color='b')
+    fig.text(.36,.4, null_h, fontsize=40, color='b')
     fig.savefig(f'output/{savetofile}.png')
     fig.text(.2, .7, f'p-value = {p_value:.3}', fontsize='xx-large')
     ax.axvline(diff_p)
