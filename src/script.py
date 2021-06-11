@@ -33,33 +33,35 @@ def pop_proportions_test(m: int, X: int, n: int, Y: int, alfa: float=0.025) -> l
     proportion = (X + Y) / float(m + n)
     test_V = ((X/m)*(1-(X/m))/m) + ((Y/n)*(1-(Y/n))/n)
     test_dist = stats.norm(0, np.sqrt(test_V))
-    p_value = 1 - test_dist.cdf(diff_p)
+    p_value = test_dist.cdf(diff_p)
     z_alpha = test_dist.ppf(alfa)
     return diff_p, proportion, test_V, test_dist, p_value, z_alpha
 
-def plot_test_results(func, p_value, title, savetofile, null_h=r'$H_0: p_1 = p_2$', alfa=0.025):
+def plot_test_results(m, X, n, Y, title, savetofile, null_h=r'$H_0: p_1 = p_2$', alfa=0.025):
     '''plots results of p_value against test distribution
     '''
+    diff_p, proportion, test_V, func, p_value, _ = pop_proportions_test(m, X, n, Y)
     fig, ax = plt.subplots(1, figsize=(16, 5))
 
-    x = np.linspace(min(p_value,2*func.ppf(alfa)), max(p_value,2*func.ppf(1- alfa)), num=250)
+    x = np.linspace(min(diff_p,2*func.ppf(alfa)), max(diff_p, 2*func.ppf(1- alfa)), num=250)
     ax.plot(x, func.pdf(x), linewidth=3, c='purple')
     ax.fill_between(x, func.pdf(x), where=(x <= func.ppf(alfa)),
                     color="red", alpha=0.5)
     ax.fill_between(x, func.pdf(x), where=(x >= func.ppf(1- alfa)),
                     color="red", alpha=0.5)
-    fig.text(.45,.4, null_h, fontsize='xx-large', color='b')
+    fig.text(.4,.4, null_h, fontsize=40, color='b')
     fig.savefig(f'output/{savetofile}.png')
-    ax.axvline(p_value)
+    fig.text(.2, .7, f'p-value = {p_value:.3}', fontsize='xx-large')
+    ax.axvline(diff_p)
     fig.savefig(f'output/{savetofile}_p.png')
 
-    if func.ppf(alfa) < p_value and p_value < func.ppf(1- alfa):
-        fig.text(.4,.2,'FAIL TO REJECT NULL HYPOTHESIS', fontsize='x-large', color='g')
+    ax.set_title(title)
+    if func.ppf(alfa) < diff_p and diff_p < func.ppf(1- alfa):
+        fig.text(.4,.3,'FAIL TO REJECT NULL HYPOTHESIS', fontsize='x-large', color='g')
     else:
-        fig.text(.42,.2,'REJECT NULL HYPOTHESIS', fontsize='x-large', rotation=0, color='r')
+        fig.text(.42,.3,'REJECT NULL HYPOTHESIS', fontsize='x-large', rotation=0, color='r')
     fig.savefig(f'output/{savetofile}_rej.png')
 
-    ax.set_title(title);
     return ax
 
 
@@ -89,7 +91,7 @@ def plot_edu(ed_pdf):
     plt.xticks(fontsize=30)
     ax.set_xlabel('Age Categories',fontsize=30)
     ax.set_ylabel('Population',fontsize=30)
-    ax.set_title('Educational Degrees')
+#     ax.set_title('Educational Degrees')
     ax.legend(loc='lower left', fontsize='xx-large')
 
     fig.savefig('output/edu_by_age.png')
